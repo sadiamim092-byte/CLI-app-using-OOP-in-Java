@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piz-za! — Project Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red:    #ff6b6b;
+    --yellow: #ffd93d;
+    --dark:   #0f0e17;
+    --dark2:  #1a1a2e;
+    --dark3:  #16213e;
+    --cream:  #fffde7;
+    --green:  #6bcf7f;
+    --pixel:  'Press Start 2P', monospace;
+    --mono:   'Share Tech Mono', monospace;
+    --vt:     'VT323', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: var(--mono);
+    overflow-x: hidden;
+  }
+
+  /* ── Scanline overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 20% 50%, #ff6b6b22 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, #ffd93d18 0%, transparent 55%),
+      var(--dark2);
+    padding: 60px 20px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /* pixel grid bg */
+  #hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,107,107,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,107,107,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: var(--pixel);
+    font-size: 10px;
+    color: var(--yellow);
+    border: 2px solid var(--yellow);
+    padding: 6px 14px;
+    margin-bottom: 28px;
+    letter-spacing: 2px;
+    animation: blink-border 2s infinite;
+  }
+  @keyframes blink-border {
+    0%,100% { border-color: var(--yellow); }
+    50%      { border-color: transparent; }
+  }
+
+  #hero h1 {
+    font-family: var(--pixel);
+    font-size: clamp(28px, 5vw, 56px);
+    color: var(--red);
+    text-shadow: 4px 4px 0 #8b0000, 8px 8px 0 #3d0000;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  #hero h1 span { color: var(--yellow); }
+
+  .hero-sub {
+    font-family: var(--vt);
+    font-size: clamp(20px, 3vw, 28px);
+    color: rgba(255,253,231,0.7);
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 50px;
+  }
+
+  .badge {
+    font-family: var(--pixel);
+    font-size: 8px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+  .badge-java  { background: #e8501533; border: 2px solid #e85015; color: #ff8c5a; }
+  .badge-html  { background: #e44d2633; border: 2px solid #e44d26; color: #ff7d5a; }
+  .badge-js    { background: #f7df1e33; border: 2px solid #f7df1e; color: #f7df1e; }
+  .badge-pixel { background: #6bcf7f33; border: 2px solid #6bcf7f; color: #6bcf7f; }
+
+  .scroll-hint {
+    font-family: var(--pixel);
+    font-size: 8px;
+    color: var(--yellow);
+    animation: float 2s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+  /* ── SECTION base ── */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-label {
+    font-family: var(--pixel);
+    font-size: 9px;
+    color: var(--yellow);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to right, var(--yellow), transparent);
+  }
+
+  .section-title {
+    font-family: var(--pixel);
+    font-size: clamp(16px, 2.5vw, 24px);
+    color: var(--cream);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--dark3);
+    max-width: 100%;
+    border-top: 3px solid #ff6b6b22;
+    border-bottom: 3px solid #ff6b6b22;
+  }
+  #about > .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  @media(max-width:700px){ .about-grid{ grid-template-columns:1fr; } }
+
+  .about-text p {
+    font-family: var(--vt);
+    font-size: 20px;
+    line-height: 1.8;
+    color: rgba(255,253,231,0.85);
+    margin-bottom: 16px;
+  }
+
+  .about-text p strong { color: var(--yellow); }
+
+  .stack-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .stack-list li {
+    font-family: var(--pixel);
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--cream);
+  }
+  .stack-list li::before {
+    content: '▶';
+    color: var(--red);
+    font-size: 8px;
+  }
+  .stack-list .desc {
+    font-family: var(--vt);
+    font-size: 16px;
+    color: rgba(255,253,231,0.6);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── GAME SECTION ── */
+  #game-section { padding: 80px 24px; }
+
+  .game-frame-wrap {
+    position: relative;
+    border: 6px solid var(--red);
+    box-shadow:
+      0 0 0 3px var(--yellow),
+      0 0 60px rgba(255,107,107,0.3),
+      0 30px 80px rgba(0,0,0,0.6);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .game-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 680px;
+    border: none;
+  }
+
+  .frame-label {
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    background: var(--red);
+    font-family: var(--pixel);
+    font-size: 7px;
+    color: #fff;
+    padding: 4px 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ── CODE SECTION ── */
+  #code-section {
+    background: var(--dark3);
+    max-width: 100%;
+    border-top: 3px solid #ffd93d22;
+  }
+  #code-section > .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .code-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    font-family: var(--pixel);
+    font-size: 8px;
+    padding: 12px 18px;
+    background: var(--dark2);
+    border: 2px solid #333;
+    border-bottom: none;
+    color: rgba(255,253,231,0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .tab-btn:hover { color: var(--cream); background: #1e1e30; }
+  .tab-btn.active {
+    background: #1e1e3a;
+    color: var(--yellow);
+    border-color: var(--yellow);
+    border-bottom: 2px solid #1e1e3a;
+    position: relative;
+    z-index: 1;
+  }
+
+  .code-window {
+    background: #1e1e3a;
+    border: 2px solid #333;
+    border-radius: 0 4px 4px 4px;
+    overflow: hidden;
+    position: relative;
+    margin-top: -2px;
+  }
+
+  .code-topbar {
+    background: #16162a;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #333;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f56; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #27c93f; }
+  .code-filename {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(255,253,231,0.5);
+    margin-left: 8px;
+  }
+
+  .code-content {
+    display: none;
+    overflow-x: auto;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+  .code-content.active { display: block; }
+
+  .code-content::-webkit-scrollbar { width: 8px; height: 8px; }
+  .code-content::-webkit-scrollbar-track { background: #16162a; }
+  .code-content::-webkit-scrollbar-thumb { background: var(--red); border-radius: 4px; }
+
+  pre {
+    margin: 0;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    color: #cdd6f4;
+    counter-reset: line;
+  }
+
+  pre .line {
+    display: block;
+    position: relative;
+    padding-left: 48px;
+  }
+  pre .line::before {
+    counter-increment: line;
+    content: counter(line);
+    position: absolute;
+    left: 0;
+    width: 36px;
+    text-align: right;
+    color: #4a4a6a;
+    user-select: none;
+    font-size: 11px;
+  }
+
+  /* syntax colors */
+  .kw  { color: #cba6f7; } /* keyword */
+  .cl  { color: #89dceb; } /* class */
+  .fn  { color: #89b4fa; } /* function */
+  .st  { color: #a6e3a1; } /* string */
+  .cm  { color: #585b70; font-style: italic; } /* comment */
+  .nm  { color: #fab387; } /* number */
+  .an  { color: #f38ba8; } /* annotation */
+
+  /* ── HOW IT WORKS ── */
+  #how {
+    padding: 80px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .step-card {
+    background: var(--dark3);
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 28px 24px;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .step-card:hover {
+    border-color: var(--red);
+    transform: translateY(-4px);
+  }
+
+  .step-num {
+    font-family: var(--pixel);
+    font-size: 28px;
+    color: var(--red);
+    opacity: 0.3;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+  }
+
+  .step-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+
+  .step-card h3 {
+    font-family: var(--pixel);
+    font-size: 9px;
+    color: var(--yellow);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .step-card p {
+    font-family: var(--vt);
+    font-size: 18px;
+    color: rgba(255,253,231,0.7);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark2);
+    border-top: 3px solid var(--red);
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  footer .pizza {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 16px;
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  footer p {
+    font-family: var(--pixel);
+    font-size: 8px;
+    color: rgba(255,253,231,0.4);
+    line-height: 2.2;
+  }
+  footer p a {
+    color: var(--yellow);
+    text-decoration: none;
+  }
+  footer p a:hover { color: var(--red); }
+
+  /* ── Divider ── */
+  .pixel-divider {
+    text-align: center;
+    font-family: var(--pixel);
+    font-size: 10px;
+    color: var(--red);
+    opacity: 0.4;
+    letter-spacing: 4px;
+    padding: 12px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<div id="hero">
+  <div class="hero-tag">✦ PROJECT SHOWCASE ✦</div>
+  <h1>PIZ-ZA! 🍕<br><span>THE GAME</span></h1>
+  <p class="hero-sub">A pixel-art pizza ordering adventure — built from Java logic to a fully playable browser game.</p>
+  <div class="hero-badges">
+    <span class="badge badge-java">Java</span>
+    <span class="badge badge-html">HTML5</span>
+    <span class="badge badge-js">JavaScript</span>
+    <span class="badge badge-pixel">Pixel Art</span>
+  </div>
+  <div class="scroll-hint">▼ scroll to explore ▼</div>
+</div>
+
+<!-- ── ABOUT ─────────────────────────────────────────────────────────────── -->
+<div id="about">
+  <div class="inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label">01 — ABOUT</div>
+        <h2 class="section-title">From Java Script<br>to Game</h2>
+        <p>This project started as a <strong>Java console application</strong> — a fully functional pizza shop ordering system with OOP principles, a checkout flow, and input validation.</p>
+        <p>I then translated the entire logic into a <strong>pixel-art browser game</strong>, keeping the same ordering rules, pricing, and flow — just now playable by anyone, anywhere.</p>
+        <p>The game features animated sprite characters, scene transitions, a real bill system, and change calculation — all matching the original Java code exactly.</p>
+      </div>
+      <div>
+        <div class="section-label">TECH STACK</div>
+        <ul class="stack-list">
+          <li>
+            Java (OOP)
+            <span class="desc">Pizza, Order, Checkout, PizzaShop classes — full console app</span>
+          </li>
+          <li>
+            HTML5 + CSS3
+            <span class="desc">Pixel-art scenes, animations, speech bubbles, overlays</span>
+          </li>
+          <li>
+            Vanilla JavaScript
+            <span class="desc">Game state, dialogue engine, cart logic, payment flow</span>
+          </li>
+          <li>
+            Pixel Art Assets
+            <span class="desc">Custom sprites, backgrounds, GIF characters, menus</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── GAME ───────────────────────────────────────────────────────────────── -->
+<section id="game-section">
+  <div class="section-label">02 — PLAYABLE DEMO</div>
+  <h2 class="section-title">Try It Yourself 🎮</h2>
+  <div class="game-frame-wrap">
+    <div class="frame-label">LIVE GAME</div>
+    <iframe src="pizza_game_v3.html" title="Piz-za! The Game" allowfullscreen></iframe>
+  </div>
+</section>
+
+<!-- ── CODE ───────────────────────────────────────────────────────────────── -->
+<div id="code-section">
+  <div class="inner">
+    <div class="section-label">03 — SOURCE CODE</div>
+    <h2 class="section-title">The Java Behind It 💻</h2>
+
+    <div class="code-tabs">
+      <button class="tab-btn active" onclick="switchTab('PizzaShop')">PizzaShop.java</button>
+      <button class="tab-btn" onclick="switchTab('Pizza')">Pizza.java</button>
+      <button class="tab-btn" onclick="switchTab('Order')">Order.java</button>
+      <button class="tab-btn" onclick="switchTab('Checkout')">Checkout.java</button>
+    </div>
+
+    <div class="code-window">
+      <div class="code-topbar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="code-filename" id="tab-filename">PizzaShop.java</span>
+      </div>
+
+      <!-- PizzaShop.java -->
+      <div class="code-content active" id="tab-PizzaShop">
+        <pre id="pre-PizzaShop"></pre>
+      </div>
+      <!-- Pizza.java -->
+      <div class="code-content" id="tab-Pizza">
+        <pre id="pre-Pizza"></pre>
+      </div>
+      <!-- Order.java -->
+      <div class="code-content" id="tab-Order">
+        <pre id="pre-Order"></pre>
+      </div>
+      <!-- Checkout.java -->
+      <div class="code-content" id="tab-Checkout">
+        <pre id="pre-Checkout"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ───────────────────────────────────────────────────────── -->
+<section id="how">
+  <div class="section-label">04 — PROCESS</div>
+  <h2 class="section-title">How I Built It</h2>
+  <div class="steps">
+    <div class="step-card">
+      <span class="step-num">01</span>
+      <span class="step-icon">☕</span>
+      <h3>JAVA CONSOLE APP</h3>
+      <p>Designed the full ordering system in Java — OOP classes for Pizza, Order, and Checkout with real input validation and a bill generator.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">02</span>
+      <span class="step-icon">🎨</span>
+      <h3>PIXEL ART ASSETS</h3>
+      <p>Created custom pixel-art backgrounds, characters, menus, and a register scene to give the game its retro atmosphere.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">03</span>
+      <span class="step-icon">🌐</span>
+      <h3>HTML + JS GAME</h3>
+      <p>Translated every Java class into JavaScript — same pricing rules, same flow, same checkout logic — now running live in the browser.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">04</span>
+      <span class="step-icon">🍕</span>
+      <h3>BROUGHT TO LIFE</h3>
+      <p>Added scene transitions, animated sprites, dialogue bubbles, an add-ons menu, and a full payment screen with change calculation.</p>
+    </div>
+  </div>
+</section>
+
+<div class="pixel-divider">· · · · · · · · · · · · · · · · · · · ·</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <span class="pizza">🍕</span>
+  <p>Built with Java + HTML + JavaScript + lots of pizza love.<br>
+  <a href="pizza_game_v3.html" target="_blank">▶ Open Game in Full Tab</a> &nbsp;|&nbsp;
+  <a href="https://github.com" target="_blank">GitHub ↗</a>
+  </p>
+</footer>
+
+<script>
+// ── Java source code strings ───────────────────────────────────────────────
+const sources = {
+PizzaShop: `import java.util.Scanner;
+
+public class PizzaShop {
+
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        printHeader();
+        Order order = new Order();
+
+        while (true) {
+            printMainMenu();
+            String input = scanner.nextLine().trim();
+
+            switch (input) {
+                case "1" -> orderPizza(order);
+                case "2" -> viewCart(order);
+                case "3" -> {
+                    if (order.isEmpty()) {
+                        System.out.println("\\n  ✘ Your cart is empty! Add a pizza first.\\n");
+                    } else {
+                        Checkout.process(order, scanner);
+                        return;
+                    }
+                }
+                case "4" -> {
+                    System.out.println("\\n  Goodbye! Come back soon. 👋\\n");
+                    return;
+                }
+                default -> System.out.println("\\n  ✘ Invalid choice. Try again.\\n");
+            }
+        }
+    }
+
+    static void orderPizza(Order order) {
+        System.out.println("\\n========================================");
+        System.out.println("           PIZZA MENU");
+        System.out.println("========================================");
+        System.out.println("  1. Regular Veg          - 300");
+        System.out.println("  2. Regular Non-Veg      - 400");
+        System.out.println("  3. Delux Veg            - 550  (cheese + toppings included)");
+        System.out.println("  4. Delux Non-Veg        - 650  (cheese + toppings included)");
+        System.out.println("  0. Back");
+        System.out.println("========================================");
+        System.out.print("  Choose pizza: ");
+
+        String choice = scanner.nextLine().trim();
+        Pizza pizza;
+
+        switch (choice) {
+            case "1" -> pizza = new Pizza(Pizza.PizzaType.VEG);
+            case "2" -> pizza = new Pizza(Pizza.PizzaType.NON_VEG);
+            case "3" -> pizza = new Pizza(Pizza.PizzaType.DELUX_VEG);
+            case "4" -> pizza = new Pizza(Pizza.PizzaType.DELUX_NON_VEG);
+            case "0" -> { return; }
+            default  -> { System.out.println("\\n  ✘ Invalid choice.\\n"); return; }
+        }
+
+        if (pizza.getType() == Pizza.PizzaType.VEG || pizza.getType() == Pizza.PizzaType.NON_VEG) {
+            addonsMenu(pizza);
+        } else {
+            System.out.println("  ✔ Delux already includes 1 cheese + 1 toppings.");
+            System.out.println("  Want to add even more?");
+            System.out.print("  (y/n): ");
+            String more = scanner.nextLine().trim().toLowerCase();
+            if (more.equals("y")) addonsMenu(pizza);
+        }
+
+        takeawayPrompt(pizza);
+        order.addPizza(pizza);
+    }
+
+    static void addonsMenu(Pizza pizza) {
+        System.out.println("\\n--- ADD-ONS ---");
+        System.out.print("  How many extra cheese? (0 to skip): ");
+        int cheeseCount = readInt(0, 10);
+        for (int i = 0; i < cheeseCount; i++) pizza.addExtraCheese();
+
+        System.out.print("  How many extra toppings? (0 to skip): ");
+        int toppingsCount = readInt(0, 10);
+        for (int i = 0; i < toppingsCount; i++) pizza.addExtraToppings();
+    }
+
+    static void takeawayPrompt(Pizza pizza) {
+        System.out.print("  Takeaway this pizza? (y/n): ");
+        String choice = scanner.nextLine().trim().toLowerCase();
+        if (choice.equals("y")) {
+            pizza.setTakeaway(true);
+            System.out.println("  ✔ Takeaway added (+20)");
+        } else {
+            System.out.println("  ✔ Dine-in selected.");
+        }
+    }
+
+    static void viewCart(Order order) {
+        if (order.isEmpty()) {
+            System.out.println("\\n  Your cart is empty.\\n");
+            return;
+        }
+        int i = 1;
+        for (Pizza p : order.getCart()) {
+            System.out.println("  --- Pizza #" + i + (p.isTakeaway() ? " [TAKEAWAY]" : " [DINE-IN]") + " ---");
+            System.out.print(p.getSummary());
+            i++;
+        }
+        System.out.println("  TOTAL : " + order.getTotal());
+    }
+
+    static int readInt(int min, int max) {
+        while (true) {
+            try {
+                int val = Integer.parseInt(scanner.nextLine().trim());
+                if (val >= min && val <= max) return val;
+                System.out.print("  ✘ Enter a number between " + min + " and " + max + ": ");
+            } catch (NumberFormatException e) {
+                System.out.print("  ✘ Invalid input. Try again: ");
+            }
+        }
+    }
+
+    static void printMainMenu() {
+        System.out.println("========================================");
+        System.out.println("  1. Order a Pizza");
+        System.out.println("  2. View Cart");
+        System.out.println("  3. Checkout");
+        System.out.println("  4. Exit");
+        System.out.println("========================================");
+        System.out.print("  Choose: ");
+    }
+
+    static void printHeader() {
+        System.out.println("   Welcome to Piz-za!  🍕");
+    }
+}`,
+
+Pizza: `public class Pizza {
+
+    public enum PizzaType {
+        VEG, NON_VEG, DELUX_VEG, DELUX_NON_VEG
+    }
+
+    private final PizzaType type;
+    private int price;
+    private final int basePrice;
+    private boolean isExtraCheeseAdded = false;
+    private boolean isExtraToppingsAdded = false;
+    private boolean isTakeaway = false;
+    private int extraCheeseCount = 0;
+    private int extraToppingsCount = 0;
+
+    private static final int EXTRA_CHEESE_PRICE   = 100;
+    private static final int EXTRA_TOPPINGS_PRICE = 150;
+    private static final int TAKEAWAY_PRICE        = 20;
+
+    public Pizza(PizzaType type) {
+        this.type = type;
+        switch (type) {
+            case VEG           -> this.price = 300;
+            case NON_VEG       -> this.price = 400;
+            case DELUX_VEG     -> { this.price = 300; addExtraCheese(); addExtraToppings(); }
+            case DELUX_NON_VEG -> { this.price = 400; addExtraCheese(); addExtraToppings(); }
+        }
+        this.basePrice = this.price;
+    }
+
+    public void addExtraCheese() {
+        isExtraCheeseAdded = true;
+        extraCheeseCount++;
+        this.price += EXTRA_CHEESE_PRICE;
+    }
+
+    public void addExtraToppings() {
+        isExtraToppingsAdded = true;
+        extraToppingsCount++;
+        this.price += EXTRA_TOPPINGS_PRICE;
+    }
+
+    public void setTakeaway(boolean takeaway) {
+        if (takeaway && !isTakeaway)       this.price += TAKEAWAY_PRICE;
+        else if (!takeaway && isTakeaway)  this.price -= TAKEAWAY_PRICE;
+        this.isTakeaway = takeaway;
+    }
+
+    public int     getPrice()   { return price; }
+    public boolean isTakeaway() { return isTakeaway; }
+    public PizzaType getType()  { return type; }
+
+    public String getSummary() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  Pizza     : ").append(type.name()).append("\\n");
+        sb.append("  Base      : ").append(basePrice).append("\\n");
+        if (isExtraCheeseAdded)
+            sb.append("  Cheese x").append(extraCheeseCount)
+              .append("  : ").append(extraCheeseCount * EXTRA_CHEESE_PRICE).append("\\n");
+        if (isExtraToppingsAdded)
+            sb.append("  Toppings x").append(extraToppingsCount)
+              .append(" : ").append(extraToppingsCount * EXTRA_TOPPINGS_PRICE).append("\\n");
+        if (isTakeaway)
+            sb.append("  Takeaway  : ").append(TAKEAWAY_PRICE).append("\\n");
+        sb.append("  Subtotal  : ").append(price).append("\\n");
+        return sb.toString();
+    }
+}`,
+
+Order: `import java.util.ArrayList;
+import java.util.List;
+
+public class Order {
+
+    private final List<Pizza> cart = new ArrayList<>();
+    private static int orderCounter = 1000;
+    private final int orderId;
+
+    public Order() {
+        this.orderId = ++orderCounter;
+    }
+
+    public void addPizza(Pizza pizza) {
+        cart.add(pizza);
+        System.out.println("  ✔ Pizza added to order!");
+    }
+
+    public List<Pizza> getCart()  { return cart; }
+    public boolean isEmpty()      { return cart.isEmpty(); }
+    public int size()             { return cart.size(); }
+
+    public int getTotal() {
+        int total = 0;
+        for (Pizza p : cart) total += p.getPrice();
+        return total;
+    }
+
+    public void printBill() {
+        System.out.println("\\n========================================");
+        System.out.println("         ORDER BILL  #" + orderId);
+        System.out.println("========================================");
+        int i = 1;
+        for (Pizza p : cart) {
+            System.out.println("  --- Pizza #" + i +
+                (p.isTakeaway() ? " [TAKEAWAY]" : " [DINE-IN]") + " ---");
+            System.out.print(p.getSummary());
+            i++;
+        }
+        System.out.println("----------------------------------------");
+        System.out.println("  TOTAL     : " + getTotal());
+        System.out.println("========================================");
+    }
+}`,
+
+Checkout: `import java.util.Scanner;
+
+public class Checkout {
+
+    public static void process(Order order, Scanner scanner) {
+        order.printBill();
+
+        int total = order.getTotal();
+        System.out.println("\\n  Amount to pay : " + total);
+        System.out.println("  (Payment must be in multiples of 10)");
+
+        int amountPaid = 0;
+
+        while (true) {
+            System.out.print("\\n  Enter amount paid: ");
+            try {
+                amountPaid = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("  ✘ Please enter a valid number.");
+                continue;
+            }
+
+            if (amountPaid % 10 != 0) {
+                System.out.println("  ✘ Amount must be a multiple of 10. Try again.");
+            } else if (amountPaid < total) {
+                System.out.println("  ✘ Insufficient amount. You need at least " + total + ".");
+            } else {
+                break;
+            }
+        }
+
+        int change = amountPaid - total;
+        System.out.println("\\n========================================");
+        System.out.println("  Paid   : " + amountPaid);
+        System.out.println("  Change : " + change);
+        System.out.println("========================================");
+        System.out.println("  Thank you! Enjoy your pizza! 🍕");
+        System.out.println("========================================\\n");
+    }
+}`
+};
+
+// ── Syntax highlighting ───────────────────────────────────────────────────
+const keywords = ['public','private','static','final','void','int','boolean','String','return',
+  'new','this','class','enum','switch','case','while','for','if','else','true','false',
+  'break','continue','import','null'];
+
+function highlight(code) {
+  return code
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // strings
+    .replace(/"([^"]*)"/g, '<span class="st">"$1"</span>')
+    // comments
+    .replace(/(\/\/[^\n]*)/g, '<span class="cm">$1</span>')
+    // numbers
+    .replace(/\b(\d+)\b/g, '<span class="nm">$1</span>')
+    // keywords
+    .replace(new RegExp(`\\b(${keywords.join('|')})\\b`, 'g'), '<span class="kw">$1</span>')
+    // class names (PascalCase)
+    .replace(/\b([A-Z][a-zA-Z0-9_]+)\b/g, '<span class="cl">$1</span>');
+}
+
+function renderCode(name) {
+  const pre = document.getElementById('pre-' + name);
+  const lines = sources[name].split('\n');
+  pre.innerHTML = lines.map(l =>
+    `<span class="line">${highlight(l) || ' '}</span>`
+  ).join('');
+}
+
+// render all on load
+Object.keys(sources).forEach(renderCode);
+
+// ── Tab switching ─────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.code-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('tab-filename').textContent = name + '.java';
+}
+</script>
+</body>
+</html>
